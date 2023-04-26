@@ -1,9 +1,12 @@
 package jretana.catalogmicroservice.model;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 import java.util.UUID;
+
+@Document(collection = "items")
 
 public class Item {
 

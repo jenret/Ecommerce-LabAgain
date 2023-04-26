@@ -7,7 +7,7 @@ RUN mvn -f /home/app/pom.xml clean package
 FROM tomcat:11.0.0-jdk17
 COPY --from=build /home/app/target/OrderMicroservice.war /usr/local/tomcat/webapps/ROOT.war
 
-ENV SERVER_PORT=8084
+ENV SERVER_PORT=8080
 ENV MONGO_HOST=ecommercemongo
 ENV MONGO_PORT=2707
 ENV MONGO_DB=ShopDB
