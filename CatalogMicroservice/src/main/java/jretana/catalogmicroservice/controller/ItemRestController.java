@@ -24,7 +24,7 @@ public class ItemRestController {
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<Item>> findAllItems() {
         List<Item> items = itemRepo.findAll();
-        return new ResponseEntity<List<Item>>(items, HttpStatus.OK);
+        return ResponseEntity.ok(items);
     }
 
     @GetMapping(path = "/search/{searchText}")

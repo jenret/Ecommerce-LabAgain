@@ -20,7 +20,16 @@ public class BasketRestController {
     @Autowired
     BasketJpaRepository basketRepo;
 
+
+
     /////// GET
+    @GetMapping(path = "")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<List<Basket>> findAllBaskets() {
+        List<Basket> baskets = basketRepo.findAll();
+        return ResponseEntity.ok(baskets);
+    }
+
     @GetMapping(path = "/{basketId}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Basket> getBasket(@PathVariable UUID basketId) {

@@ -1,21 +1,24 @@
-version: '1'
+version: '3'
 services:
   ecommercemongo:
     image: 'mongo:latest'
     container_name: ecommercemongo
     ports:
-      - "2707:27017"
-    hostname: mongo
+      - "27017:27017"
+    volumes:
+      - mongodb_data_container:/data/db
     networks:
       - ecommerce
+
   ecommerceeureka:
-    container_name: ecommerceeureka   
+    container_name: ecommerceeureka
     image: steeltoeoss/eureka-server:latest
     hostname: steeltoeoss/eureka-server
     ports:
       - 8761:8761
     networks:
       - ecommerce
+
   SEN300APIGatewayOcelot:
     container_name: SEN300APIGatewayOcelot
     build:
@@ -27,11 +30,12 @@ services:
       - 5041:80
     networks:
       - ecommerce
-    depends_on:      
+    depends_on:
       - ecommerceeureka
+
   usermicroservice:
     container_name: UserMicroservice
-    build: 
+    build:
       context: ./UserMicroservice
       dockerfile: Dockerfile
     image: usermicroservice:1
@@ -44,45 +48,16 @@ services:
       - ecommercemongo
       - ecommerceeureka
       - SEN300APIGatewayOcelot
+
   catalogmicroservice:
     container_name: CatalogMicroservice
-    build: 
+    build:
       context: ./CatalogMicroservice
       dockerfile: Dockerfile
     image: catalogmicroservice:1
-    hostname: CatalogMicroservice
+    #hostname: CatalogMicroservice
     ports:
-      - "8082:8082"
-    networks:
-      - ecommerce
-    depends_on:
-      - ecommercemongo
-      - ecommerceeureka
-      - SEN300APIGatewayOcelot
-  basketmicroservice:
-    container_name: BasketMicroservice
-    build: 
-      context: ./BasketMicroservice
-      dockerfile: Dockerfile
-    image: basketmicroservice:1
-    hostname: BasketMicroservice
-    ports:
-      - "8083:8083"
-    networks:
-      - ecommerce
-    depends_on:
-      - ecommercemongo
-      - ecommerceeureka
-      - SEN300APIGatewayOcelot
-  ordermicroservice:
-    container_name: OrderMicroservice
-    build: 
-      context: ./OrderMicroservice
-      dockerfile: Dockerfile
-    image: ordermicroservice:1
-    hostname: OrderMicroservice
-    ports:
-      - "8084:8084"
+      - "8082:8080"
     networks:
       - ecommerce
     depends_on:
@@ -90,6 +65,38 @@ services:
       - ecommerceeureka
       - SEN300APIGatewayOcelot
 
+  basketmicroservice:
+    container_name: BasketMicroservice
+    build:
+      context: ./BasketMicroservice
+      dockerfile: Dockerfile
+    image: basketmicroservice:1
+    ports:
+      - "8083:8080"
+    networks:
+      - ecommerce
+    depends_on:
+      - ecommercemongo
+      - ecommerceeureka
+      - SEN300APIGatewayOcelot
+
+  ordermicroservice:
+    container_name: OrderMicroservice
+    build:
+      context: ./OrderMicroservice
+      dockerfile: Dockerfile
+    image: ordermicroservice:1
+    ports:
+      - "8084:8080"
+    networks:
+      - ecommerce
+    depends_on:
+      - ecommercemongo
+      - ecommerceeureka
+      - SEN300APIGatewayOcelot
+
+volumes:
+  mongodb_data_container:
 networks:
   ecommerce:
     name: shopnetwork
