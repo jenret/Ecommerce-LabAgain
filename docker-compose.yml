@@ -1,0 +1,95 @@
+version: '1'
+services:
+  ecommercemongo:
+    image: 'mongo:latest'
+    container_name: ecommercemongo
+    ports:
+      - "2707:27017"
+    hostname: mongo
+    networks:
+      - ecommerce
+  ecommerceeureka:
+    container_name: ecommerceeureka   
+    image: steeltoeoss/eureka-server:latest
+    hostname: steeltoeoss/eureka-server
+    ports:
+      - 8761:8761
+    networks:
+      - ecommerce
+  SEN300APIGatewayOcelot:
+    container_name: SEN300APIGatewayOcelot
+    build:
+      context: ./dotnet-apigateway-ocelot
+      dockerfile: Dockerfile
+    image: sen300ocelotgatewayapi:1
+    hostname: SEN300APIGatewayOcelot
+    ports:
+      - 5041:80
+    networks:
+      - ecommerce
+    depends_on:      
+      - ecommerceeureka
+  usermicroservice:
+    container_name: UserMicroservice
+    build: 
+      context: ./UserMicroservice
+      dockerfile: Dockerfile
+    image: usermicroservice:1
+    hostname: UserMicroservice
+    ports:
+      - "8081:8081"
+    networks:
+      - ecommerce
+    depends_on:
+      - ecommercemongo
+      - ecommerceeureka
+      - SEN300APIGatewayOcelot
+  catalogmicroservice:
+    container_name: CatalogMicroservice
+    build: 
+      context: ./CatalogMicroservice
+      dockerfile: Dockerfile
+    image: catalogmicroservice:1
+    hostname: CatalogMicroservice
+    ports:
+      - "8082:8082"
+    networks:
+      - ecommerce
+    depends_on:
+      - ecommercemongo
+      - ecommerceeureka
+      - SEN300APIGatewayOcelot
+  basketmicroservice:
+    container_name: BasketMicroservice
+    build: 
+      context: ./BasketMicroservice
+      dockerfile: Dockerfile
+    image: basketmicroservice:1
+    hostname: BasketMicroservice
+    ports:
+      - "8083:8083"
+    networks:
+      - ecommerce
+    depends_on:
+      - ecommercemongo
+      - ecommerceeureka
+      - SEN300APIGatewayOcelot
+  ordermicroservice:
+    container_name: OrderMicroservice
+    build: 
+      context: ./OrderMicroservice
+      dockerfile: Dockerfile
+    image: ordermicroservice:1
+    hostname: OrderMicroservice
+    ports:
+      - "8084:8084"
+    networks:
+      - ecommerce
+    depends_on:
+      - ecommercemongo
+      - ecommerceeureka
+      - SEN300APIGatewayOcelot
+
+networks:
+  ecommerce:
+    name: shopnetwork

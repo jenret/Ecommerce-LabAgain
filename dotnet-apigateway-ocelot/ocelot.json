@@ -1,0 +1,90 @@
+{
+  "Routes": [
+    {
+      "ServiceName": "CatalogMicroservice",
+      "DownstreamPathTemplate": "/{everything}",
+      "UpstreamPathTemplate": "/catalog/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 15
+      },
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection",
+        "Key": null,
+        "Expiry": 0
+      }
+    },
+    {
+      "ServiceName": "BasketMicroservice",
+      "DownstreamPathTemplate": "/{everything}",
+      "UpstreamPathTemplate": "/basketservice/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 15
+      },
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection",
+        "Key": null,
+        "Expiry": 0
+      }
+    },
+    {
+      "ServiceName": "OrderMicroservice",
+      "DownstreamPathTemplate": "/{everything}",
+      "UpstreamPathTemplate": "/ordersapi/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "DELETE"
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 15
+      },
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection",
+        "Key": null,
+        "Expiry": 0
+      }
+    },
+    {
+      "ServiceName": "UserMicroservice",
+      "DownstreamPathTemplate": "/{everything}",
+      "UpstreamPathTemplate": "/usersapi/{everything}",
+      "UpstreamHttpMethod": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ],
+      "FileCacheOptions": {
+        "TtlSeconds": 15
+      },
+      "LoadBalancerOptions": {
+        "Type": "LeastConnection",
+        "Key": null,
+        "Expiry": 0
+      }
+    }
+  ],
+  "GlobalConfiguration": {
+    "BaseUrl": "http://SEN300APIGatewayOcelot:80",
+    "RequestIdKey": "OcRequestId",
+    "DownstreamScheme": "http",
+    "ReRoutesCaseSensitive": false,
+    "UseServiceDiscovery": true,
+    "ServiceDiscoveryProvider": {
+      "Host": "ecommerceeureka",
+      "Port": 8761,
+      "Type": "Eureka"
+    }
+  }
+}
